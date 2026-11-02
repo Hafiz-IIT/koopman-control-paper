@@ -1,15 +1,22 @@
-# Koopman Control — Research Manuscript
+# Koopman-Based Linear Embeddings for Control of Automated Agents
 
-Manuscript companion to the **Koopman Control Lab**.
+**Status: manuscript in preparation; not submitted or published.**
 
-## Research question
-When does a nonlinear control problem admit a useful low-dimensional lifted representation with approximately linear evolution?
+This repository contains the LaTeX source and evaluation protocol for a study of finite-dimensional lifted models learned from transition data.
 
-## Sections
-- `paper/abstract.md`
-- `paper/method.md`
-- `paper/claims.md`
-- `paper/limitations.md`
-- `paper/reproducibility.md`
+## Files
+- paper/main.tex — manuscript source
+- paper/EXPERIMENT_PROTOCOL.md — systems, baselines, splits, metrics, and ablations
+- modular notes in paper/ — abstract, method, claims, limitations, reproducibility
+- Makefile — local PDF build target
 
-**Status:** research protocol/scaffold. No publication or empirical superiority is claimed.\n\n## Companion relationship\n\nThis is the **manuscript companion** to [Koopman Control Lab](https://github.com/Hafiz-IIT/koopman-control-lab), which is the executable prototype. No publication, peer-review, optimality, or real-world control claim is made here.\n
+## Build
+Requires LaTeX with geometry, AMS math, booktabs, and hyperref packages.
+
+    make pdf
+    make clean
+
+## Evidence boundary
+The companion lab implements a scalar polynomial lifting and regularized EDMD-style fit. It does not establish an invariant Koopman subspace, physical-system validity, or control performance. No benchmark results are claimed until the protocol is executed.
+
+Companion code: https://github.com/Hafiz-IIT/koopman-control-lab
