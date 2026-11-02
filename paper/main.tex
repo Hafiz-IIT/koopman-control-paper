@@ -11,6 +11,7 @@
 We outline an empirical study of finite-dimensional lifted linear models for approximating nonlinear agent dynamics. The accompanying laboratory implements a monomial dictionary and a ridge-regularized EDMD-style operator fit on scalar transition data. The present artifact is a methodological prototype; it does not establish Koopman invariance, control performance, or physical-system validity.
 \end{abstract}
 \section{Introduction}
+Finite-dimensional approximations of the Koopman operator can be constructed from snapshot pairs and observable dictionaries using EDMD \cite{williams2015edmd}. Controlled linear predictors based on lifted representations have also been studied for model predictive control \cite{korda2018mpc}.,The current repository provides a transparent baseline for studying lifted dynamics.
 A nonlinear state transition may become easier to analyze after mapping observations into a feature space. A finite dictionary provides a practical approximation, but approximation quality depends on dictionary choice, data coverage, regularization, and the operating region.
 \section{Problem formulation}
 Given paired observations $(x_t,x_{t+1})$, choose a lifting map $\phi(x)\in\mathbb{R}^d$ and estimate $K$ such that $\phi(x_{t+1})\approx K^\top\phi(x_t)$. The estimate is an empirical finite-dimensional approximation, not proof of an invariant subspace.
@@ -24,4 +25,9 @@ No benchmark results are claimed in this draft. Add complete tables, configurati
 A scalar polynomial example is not evidence of a useful embedding for high-dimensional agents. Finite-horizon prediction error is not a control guarantee. Future work must test higher-dimensional systems and close the loop with explicit safety constraints.
 \section{Conclusion}
 The current repository provides a transparent baseline for studying lifted dynamics. Generalization and control utility remain open empirical questions.
+\begin{thebibliography}{9}
+\bibitem{williams2015edmd} M. O. Williams, I. G. Kevrekidis, and C. W. Rowley. A Data-Driven Approximation of the Koopman Operator: Extending Dynamic Mode Decomposition. \textit{Journal of Nonlinear Science}, 25:1307--1346, 2015. DOI: \href{https://doi.org/10.1007/s00332-015-9258-5}{10.1007/s00332-015-9258-5}.
+\bibitem{korda2018mpc} M. Korda and I. Mezić. Linear Predictors for Nonlinear Dynamical Systems: Koopman Operator Meets Model Predictive Control. \textit{Automatica}, 93:149--160, 2018. DOI: \href{https://doi.org/10.1016/j.automatica.2018.03.046}{10.1016/j.automatica.2018.03.046}.
+\bibitem{korda2018convergence} M. Korda and I. Mezić. On Convergence of Extended Dynamic Mode Decomposition to the Koopman Operator. \textit{Journal of Nonlinear Science}, 28:687--710, 2018. DOI: \href{https://doi.org/10.1007/s00332-017-9423-0}{10.1007/s00332-017-9423-0}.
+\end{thebibliography}
 \end{document}
