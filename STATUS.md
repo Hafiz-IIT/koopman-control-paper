@@ -1,1 +1,1 @@
-Manuscript scaffold linked to the Koopman-inspired lab; not published or peer reviewed.
+LaTeX manuscript, verified Koopman/EDMD references, experiment protocol, and results schema are in place. CI compiles the source. No benchmark results, invariant-subspace claim, submission, or publication is claimed.
