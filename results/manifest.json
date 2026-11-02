@@ -1,0 +1,8 @@
+{
+  "study": "koopman-lifted-dynamics-evaluation",
+  "status": "not_run",
+  "results_available": false,
+  "data_type": "synthetic_scalar_dynamics",
+  "required_metrics": ["one_step_rmse", "multi_step_rmse", "max_abs_error", "out_of_range_error"],
+  "notes": "Finite-dimensional EDMD-style approximation only; no invariance or physical validation claim."
+}
