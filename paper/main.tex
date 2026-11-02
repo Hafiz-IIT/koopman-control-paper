@@ -1,0 +1,27 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,booktabs}
+\usepackage{hyperref}
+\title{Koopman-Based Linear Embeddings for Control of Automated Agents}
+\author{Syed Hafiz Ali}
+\date{Research manuscript in preparation}
+\begin{document}
+\maketitle
+\begin{abstract}
+We outline an empirical study of finite-dimensional lifted linear models for approximating nonlinear agent dynamics. The accompanying laboratory implements a monomial dictionary and a ridge-regularized EDMD-style operator fit on scalar transition data. The present artifact is a methodological prototype; it does not establish Koopman invariance, control performance, or physical-system validity.
+\end{abstract}
+\section{Introduction}
+A nonlinear state transition may become easier to analyze after mapping observations into a feature space. A finite dictionary provides a practical approximation, but approximation quality depends on dictionary choice, data coverage, regularization, and the operating region.
+\section{Problem formulation}
+Given paired observations $(x_t,x_{t+1})$, choose a lifting map $\phi(x)\in\mathbb{R}^d$ and estimate $K$ such that $\phi(x_{t+1})\approx K^\top\phi(x_t)$. The estimate is an empirical finite-dimensional approximation, not proof of an invariant subspace.
+\section{Method}
+The companion code uses monomials $\phi(x)=(x,x^2,\ldots,x^d)$ and ridge-regularized least squares. It exposes the operator convention, prediction routine, and multi-step lifted rollout.
+\section{Experimental protocol}
+Compare persistence and fitted linear-in-state baselines against dictionary degrees 1--3. Use chronological train/test splits, held-out state ranges, multiple nonlinear data-generating systems, and fixed seeds. Report one-step and multi-step RMSE, maximum absolute error, sensitivity to regularization, and out-of-range degradation.
+\section{Results}
+No benchmark results are claimed in this draft. Add complete tables, configurations, and machine-readable outputs only after running the protocol.
+\section{Limitations}
+A scalar polynomial example is not evidence of a useful embedding for high-dimensional agents. Finite-horizon prediction error is not a control guarantee. Future work must test higher-dimensional systems and close the loop with explicit safety constraints.
+\section{Conclusion}
+The current repository provides a transparent baseline for studying lifted dynamics. Generalization and control utility remain open empirical questions.
+\end{document}
