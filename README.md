@@ -18,6 +18,6 @@ Requires LaTeX with geometry, AMS math, booktabs, hyperref, and microtype packag
     make clean
 
 ## Evidence boundary
-The v0.1 pilot compares persistence, affine linear, and polynomial EDMD models on synthetic scalar maps. It does not establish an invariant Koopman subspace, physical-system validity, or control/MPC performance. The complete machine-readable outputs are generated and archived by the companion lab's GitHub Actions workflow.
+The v0.1 pilot compares persistence, affine linear, and polynomial EDMD models on synthetic scalar maps. It does not establish an invariant Koopman subspace, physical-system validity, or control/MPC performance. The complete machine-readable outputs are generated and archived by the companion lab's [latest successful GitHub Actions run](https://github.com/Hafiz-IIT/koopman-control-lab/actions/runs/43946042060).
 
 Companion code and results: https://github.com/Hafiz-IIT/koopman-control-lab
