@@ -1,11 +1,13 @@
-# Results directory
+# Results
 
-No benchmark results are claimed yet. Store outputs from the protocol in paper/EXPERIMENT_PROTOCOL.md here.
+A reproducible **v0.1 synthetic scalar prediction pilot** has been completed.
 
-Expected files:
-- experiment_config.json — data-generating equations, seed, dictionary degree, ridge coefficient, and split boundary
-- summary.csv — baseline and EDMD-style metrics by system and rollout horizon
-- predictions/ — optional held-out predictions for reproducibility
-- analysis.md — error trends, out-of-range failures, and protocol deviations
+The canonical code and complete machine-readable outputs live in the companion lab:
 
-Required metrics include one-step RMSE, multi-step RMSE by horizon, maximum absolute error, and error growth. Do not describe a finite polynomial fit as a proven Koopman-invariant subspace.
+- [Experiment runner and implementation](https://github.com/Hafiz-IIT/koopman-control-lab)
+- [Committed summary and limitations](https://github.com/Hafiz-IIT/koopman-control-lab/blob/main/results/summary.md)
+- [Experiment CI run and downloadable artifact](https://github.com/Hafiz-IIT/koopman-control-lab/actions/runs/43945826578)
+
+The CI artifact `koopman-scalar-benchmark` contains per-seed and aggregate CSVs plus a result manifest. The result manifest in this paper repository records the exact code revision and workflow run.
+
+The current evidence is a pilot, not a completed research contribution. Ridge sensitivity, sample-size/coverage sweeps, noisy dynamics, higher-dimensional systems, and control/MPC evaluation remain outstanding.
