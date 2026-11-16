@@ -1,8 +1,21 @@
 {
-  "study": "koopman-lifted-dynamics-evaluation",
-  "status": "not_run",
-  "results_available": false,
-  "data_type": "synthetic_scalar_dynamics",
-  "required_metrics": ["one_step_rmse", "multi_step_rmse", "max_abs_error", "out_of_range_error"],
-  "notes": "Finite-dimensional EDMD-style approximation only; no invariance or physical validation claim."
+  "study": "scalar_koopman_lifted_dynamics_prediction",
+  "status": "pilot_complete",
+  "results_available": true,
+  "result_scope": "synthetic_scalar_prediction_only",
+  "protocol_version": "0.1",
+  "systems": 5,
+  "seeds": 10,
+  "methods": ["persistence", "affine_linear", "edmd_degree_2", "edmd_degree_3"],
+  "per_seed_evaluations": 200,
+  "rollout_horizon": 20,
+  "canonical_code_repository": "https://github.com/Hafiz-IIT/koopman-control-lab",
+  "experiment_code_revision": "24e0e41d7a09a5f951f1d9c0ca040f61d79ef9ef",
+  "workflow_run": "https://github.com/Hafiz-IIT/koopman-control-lab/actions/runs/43945826578",
+  "artifact_name": "koopman-scalar-benchmark",
+  "notes": [
+    "The pilot does not establish Koopman invariance or control/MPC utility.",
+    "Ridge, sample-size, noise, and training-coverage sensitivity remain outstanding.",
+    "The manuscript remains in preparation and has not been submitted or peer reviewed."
+  ]
 }
