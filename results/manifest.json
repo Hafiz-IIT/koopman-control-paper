@@ -10,8 +10,8 @@
   "per_seed_evaluations": 200,
   "rollout_horizon": 20,
   "canonical_code_repository": "https://github.com/Hafiz-IIT/koopman-control-lab",
-  "experiment_code_revision": "24e0e41d7a09a5f951f1d9c0ca040f61d79ef9ef",
-  "workflow_run": "https://github.com/Hafiz-IIT/koopman-control-lab/actions/runs/43945826578",
+  "experiment_code_revision": "0186b9346045ddea1bd105eefb6130cb2cbcbea7",
+  "workflow_run": "https://github.com/Hafiz-IIT/koopman-control-lab/actions/runs/43946042060",
   "artifact_name": "koopman-scalar-benchmark",
   "notes": [
     "The pilot does not establish Koopman invariance or control/MPC utility.",
