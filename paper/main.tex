@@ -11,8 +11,9 @@
 We outline an empirical study of finite-dimensional lifted linear models for approximating nonlinear agent dynamics. The accompanying laboratory implements a monomial dictionary and a ridge-regularized EDMD-style operator fit on scalar transition data. The present artifact is a methodological prototype; it does not establish Koopman invariance, control performance, or physical-system validity.
 \end{abstract}
 \section{Introduction}
-Finite-dimensional approximations of the Koopman operator can be constructed from snapshot pairs and observable dictionaries using EDMD \cite{williams2015edmd}. Controlled linear predictors based on lifted representations have also been studied for model predictive control \cite{korda2018mpc}.,The current repository provides a transparent baseline for studying lifted dynamics.
-A nonlinear state transition may become easier to analyze after mapping observations into a feature space. A finite dictionary provides a practical approximation, but approximation quality depends on dictionary choice, data coverage, regularization, and the operating region.
+Finite-dimensional approximations of the Koopman operator can be constructed from snapshot pairs and observable dictionaries using EDMD \cite{williams2015edmd}. Controlled linear predictors based on lifted representations have also been studied for model predictive control \cite{korda2018mpc}.
+
+The current repository provides a transparent baseline for studying lifted dynamics. A nonlinear state transition may become easier to analyze after mapping observations into a feature space. A finite dictionary provides a practical approximation, but approximation quality depends on dictionary choice, data coverage, regularization, and the operating region.
 \section{Problem formulation}
 Given paired observations $(x_t,x_{t+1})$, choose a lifting map $\phi(x)\in\mathbb{R}^d$ and estimate $K$ such that $\phi(x_{t+1})\approx K^\top\phi(x_t)$. The estimate is an empirical finite-dimensional approximation, not proof of an invariant subspace.
 \section{Method}
