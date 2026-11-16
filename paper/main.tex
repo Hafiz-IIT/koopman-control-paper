@@ -2,33 +2,111 @@
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amssymb,booktabs}
 \usepackage{hyperref}
-\title{Koopman-Based Linear Embeddings for Control of Automated Agents}
+\usepackage{microtype}
+
+\title{Koopman-Lifted Prediction of Scalar Nonlinear Dynamics: A Reproducible Synthetic Benchmark}
 \author{Syed Hafiz Ali}
 \date{Research manuscript in preparation}
+
 \begin{document}
 \maketitle
-\begin{abstract}
-We outline an empirical study of finite-dimensional lifted linear models for approximating nonlinear agent dynamics. The accompanying laboratory implements a monomial dictionary and a ridge-regularized EDMD-style operator fit on scalar transition data. The present artifact is a methodological prototype; it does not establish Koopman invariance, control performance, or physical-system validity.
-\end{abstract}
-\section{Introduction}
-Finite-dimensional approximations of the Koopman operator can be constructed from snapshot pairs and observable dictionaries using EDMD \cite{williams2015edmd}. Controlled linear predictors based on lifted representations have also been studied for model predictive control \cite{korda2018mpc}.
 
-The current repository provides a transparent baseline for studying lifted dynamics. A nonlinear state transition may become easier to analyze after mapping observations into a feature space. A finite dictionary provides a practical approximation, but approximation quality depends on dictionary choice, data coverage, regularization, and the operating region.
+\begin{abstract}
+Finite-dimensional approximations of the Koopman operator provide a way to represent nonlinear dynamics through linear evolution in a chosen observable space. This manuscript reports a reproducible synthetic pilot of polynomial EDMD-style prediction on five scalar nonlinear maps. We compare persistence, a fitted affine linear baseline, and polynomial dictionaries of degrees two and three across ten fixed seeds, with separate in-distribution and out-of-range tests and twenty-step rollouts. Degree-three lifting substantially reduces one-step error on the selected smooth nonlinear maps, but the benefit is not uniform: it worsens twenty-step error on a piecewise regime-shift map and has higher out-of-range error than the affine baseline on the tanh map. These results illustrate dictionary dependence and compounding prediction error, not a general Koopman approximation guarantee. All systems are synthetic; no invariant-subspace, control, physical-system, or safety claim is made.
+\end{abstract}
+
+\section{Introduction}
+Finite-dimensional approximations of the Koopman operator can be constructed from snapshot pairs and observable dictionaries using extended dynamic mode decomposition (EDMD) \cite{williams2015edmd}. Lifted linear predictors have also been studied for model predictive control \cite{korda2018mpc}. The present study is deliberately narrower: it evaluates scalar prediction error before attempting closed-loop control.
+
+A finite dictionary is a modelling choice. Approximation quality depends on dictionary structure, data coverage, regularization, the operating region, and the degree to which the selected observables capture the dynamics. A good one-step fit need not imply good multi-step prediction, and neither implies control utility.
+
 \section{Problem formulation}
-Given paired observations $(x_t,x_{t+1})$, choose a lifting map $\phi(x)\in\mathbb{R}^d$ and estimate $K$ such that $\phi(x_{t+1})\approx K^\top\phi(x_t)$. The estimate is an empirical finite-dimensional approximation, not proof of an invariant subspace.
-\section{Method}
-The companion code uses monomials $\phi(x)=(x,x^2,\ldots,x^d)$ and ridge-regularized least squares. It exposes the operator convention, prediction routine, and multi-step lifted rollout.
+Consider a deterministic scalar system
+\[
+x_{t+1}=f(x_t).
+\]
+For a polynomial dictionary of degree $d$, define
+\[
+\phi_d(x)=(1,x,x^2,\ldots,x^d)^\top.
+\]
+Given transition pairs $(x_i,x_i^+)$, EDMD estimates a finite matrix $K$ such that
+\[
+\phi_d(x_i^+)\approx K^\top\phi_d(x_i).
+\]
+The estimate is an empirical finite-dimensional approximation. It is not, by itself, proof that the chosen span is invariant under the Koopman operator.
+
+\section{Implementation}
+The companion implementation uses the constant-augmented monomial dictionary and ridge-regularized least squares. The constant observable is not ridge-penalized. The stored operator follows the row-vector convention $z_{t+1}[j]=\sum_i z_t[i]K[i][j]$, equivalent to the column-vector equation above.
+
+The current implementation solves the regularized normal equations with partial-pivot Gaussian elimination. The dictionary is low-dimensional and inputs are bounded in this pilot, but normal equations can worsen conditioning; a QR- or SVD-based solver is an important follow-up before increasing dictionary size or state dimension.
+
 \section{Experimental protocol}
-Compare persistence and fitted linear-in-state baselines against dictionary degrees 1--3. Use chronological train/test splits, held-out state ranges, multiple nonlinear data-generating systems, and fixed seeds. Report one-step and multi-step RMSE, maximum absolute error, sensitivity to regularization, and out-of-range degradation.
+The v0.1 protocol evaluates five declared synthetic maps: cubic contraction, sinusoidal contraction, tanh contraction, quadratic-affine contraction, and a piecewise regime-shift map. For each system and each of ten seeds, the experiment draws 600 independent training transitions, 300 independent in-distribution test transitions, and 300 out-of-range test transitions. Training and in-distribution test states are uniform on $[-1,1]$; out-of-range states are uniform on $[-1.5,1.5]$. One hundred rollout initial states are sampled from $[-1,1]$ and forecast for twenty steps.
+
+The test sets use separate deterministic seed streams; the samples are independent state-transition pairs rather than chronological time-series splits. We compare persistence, an affine linear model (degree-one EDMD), and degree-two and degree-three EDMD. Ridge is fixed at $10^{-8}$ before test evaluation. Metrics are one-step RMSE, out-of-range one-step RMSE, and twenty-step rollout RMSE; maximum absolute errors are also retained. Aggregate tables report means and sample standard deviations across seeds, with 95\% t-intervals in the machine-readable summary.
+
 \section{Results}
-No benchmark results are claimed in this draft. Add complete tables, configurations, and machine-readable outputs only after running the protocol.
-\section{Limitations}
-A scalar polynomial example is not evidence of a useful embedding for high-dimensional agents. Finite-horizon prediction error is not a control guarantee. Future work must test higher-dimensional systems and close the loop with explicit safety constraints.
+The experiment runner completed 200 per-seed model evaluations (five systems, ten seeds, four methods). Table~\ref{tab:results} reports mean $\pm$ sample standard deviation. Full per-seed results, maximum errors, and confidence intervals are archived in the companion experiment artifact.
+
+\begin{table}[ht]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llrrr}
+\toprule
+System & Method & One-step RMSE & OOD RMSE & 20-step RMSE \\
+\midrule
+Cubic & Affine linear & $0.0184\pm0.00078$ & $0.0992\pm0.0055$ & $0.0356\pm0.0013$ \\
+Cubic & EDMD $d=2$ & $0.0184\pm0.00077$ & $0.0993\pm0.0054$ & $0.0358\pm0.0012$ \\
+Cubic & EDMD $d=3$ & $7.51\times10^{-11}\pm2.2\times10^{-12}$ & $3.55\times10^{-10}\pm2.3\times10^{-11}$ & $0.00415\pm0.00018$ \\
+Cubic & Persistence & $0.131\pm0.0058$ & $0.277\pm0.0095$ & $0.452\pm0.024$ \\
+\addlinespace
+Piecewise & Affine linear & $0.0472\pm0.00092$ & $0.0849\pm0.0043$ & $0.289\pm0.027$ \\
+Piecewise & EDMD $d=2$ & $0.0431\pm0.0013$ & $0.0915\pm0.0059$ & $0.285\pm0.039$ \\
+Piecewise & EDMD $d=3$ & $0.0327\pm0.0012$ & $0.0868\pm0.0066$ & $0.348\pm0.017$ \\
+Piecewise & Persistence & $0.0532\pm0.0016$ & $0.106\pm0.0038$ & $0.288\pm0.022$ \\
+\addlinespace
+Quadratic-affine & Affine linear & $0.0361\pm0.0013$ & $0.0944\pm0.0040$ & $0.112\pm0.0058$ \\
+Quadratic-affine & EDMD $d=2$ & $2.13\times10^{-11}\pm1.4\times10^{-12}$ & $3.45\times10^{-11}\pm2.7\times10^{-12}$ & $0.00884\pm0.00095$ \\
+Quadratic-affine & EDMD $d=3$ & $5.20\times10^{-11}\pm1.5\times10^{-12}$ & $2.34\times10^{-10}\pm1.5\times10^{-11}$ & $0.00322\pm0.00019$ \\
+Quadratic-affine & Persistence & $0.190\pm0.0061$ & $0.298\pm0.013$ & $0.515\pm0.033$ \\
+\addlinespace
+Sinusoidal & Affine linear & $0.0163\pm0.00061$ & $0.0667\pm0.0036$ & $0.0796\pm0.0026$ \\
+Sinusoidal & EDMD $d=2$ & $0.0163\pm0.00060$ & $0.0668\pm0.0036$ & $0.0799\pm0.0024$ \\
+Sinusoidal & EDMD $d=3$ & $0.000885\pm0.000041$ & $0.0220\pm0.0014$ & $0.0162\pm0.00075$ \\
+Sinusoidal & Persistence & $0.0716\pm0.0036$ & $0.161\pm0.0057$ & $0.324\pm0.019$ \\
+\addlinespace
+Tanh & Affine linear & $0.0106\pm0.00028$ & $0.0275\pm0.0015$ & $0.0289\pm0.00092$ \\
+Tanh & EDMD $d=2$ & $0.0106\pm0.00027$ & $0.0276\pm0.0015$ & $0.0290\pm0.00083$ \\
+Tanh & EDMD $d=3$ & $0.00245\pm0.000081$ & $0.0296\pm0.0019$ & $0.00973\pm0.00036$ \\
+Tanh & Persistence & $0.118\pm0.0046$ & $0.197\pm0.0054$ & $0.446\pm0.024$ \\
+\bottomrule
+\end{tabular}
+\caption{Synthetic scalar prediction results. Entries are mean $\pm$ sample standard deviation across ten seeds. OOD denotes test states sampled outside the training interval.}
+\label{tab:results}
+\end{table}
+
+\section{Discussion}
+Three observations are supported by this pilot.
+
+First, degree-three lifting reduces one-step error on the selected smooth nonlinear systems. The near-zero one-step errors for the cubic and quadratic-affine maps are expected because those noiseless functions are exactly representable by the chosen polynomial dictionary. They are not evidence of generalization to unknown dynamics.
+
+Second, adding a quadratic observable provides little benefit over the affine baseline on the odd cubic, sinusoidal, and tanh systems, while degree two captures the quadratic-affine map. Dictionary degree should therefore be selected with regard to the structure of the dynamics rather than treated as a monotonic performance knob.
+
+Third, one-step improvements do not guarantee better extrapolation or long-horizon behaviour. On the tanh system, degree three has lower in-distribution error but higher OOD RMSE than the affine baseline. On the piecewise regime-shift system, degree three has lower one-step RMSE but higher twenty-step rollout RMSE than persistence and the affine baseline. These are important negative results: model mismatch and compounding lifted-space error remain consequential.
+
+\section{Limitations and next experiments}
+The study is limited to five deterministic scalar maps, ten seeds, a fixed ridge coefficient, and independent state-transition samples. It does not include observation noise, transition noise, parameter uncertainty, ridge/sample-size sensitivity, higher-dimensional systems, or chronological trajectory data. The multi-step model is iterated in lifted space without projection back onto the nonlinear lifting manifold. The solver uses normal equations and should be compared with a numerically stable QR/SVD implementation.
+
+Most importantly, this is a prediction study, not a control study. No controller, MPC objective, constraint handling, physical system, or robotic agent is evaluated. Future work should add regularization and data-coverage sweeps, noisy dynamics, higher-dimensional examples, and only then a separately specified closed-loop MPC experiment.
+
 \section{Conclusion}
-The current repository provides a transparent baseline for studying lifted dynamics. Generalization and control utility remain open empirical questions.
+In this controlled synthetic pilot, polynomial EDMD improves prediction when the dictionary matches the structure of the selected smooth dynamics, but higher degree does not uniformly improve OOD or long-horizon behaviour. The defensible result is a reproducible illustration of dictionary dependence and prediction-error accumulation on five scalar maps. Claims about Koopman invariance, control utility, or physical systems remain open.
+
 \begin{thebibliography}{9}
 \bibitem{williams2015edmd} M. O. Williams, I. G. Kevrekidis, and C. W. Rowley. A Data-Driven Approximation of the Koopman Operator: Extending Dynamic Mode Decomposition. \textit{Journal of Nonlinear Science}, 25:1307--1346, 2015. DOI: \href{https://doi.org/10.1007/s00332-015-9258-5}{10.1007/s00332-015-9258-5}.
 \bibitem{korda2018mpc} M. Korda and I. Mezić. Linear Predictors for Nonlinear Dynamical Systems: Koopman Operator Meets Model Predictive Control. \textit{Automatica}, 93:149--160, 2018. DOI: \href{https://doi.org/10.1016/j.automatica.2018.03.046}{10.1016/j.automatica.2018.03.046}.
 \bibitem{korda2018convergence} M. Korda and I. Mezić. On Convergence of Extended Dynamic Mode Decomposition to the Koopman Operator. \textit{Journal of Nonlinear Science}, 28:687--710, 2018. DOI: \href{https://doi.org/10.1007/s00332-017-9423-0}{10.1007/s00332-017-9423-0}.
 \end{thebibliography}
+
 \end{document}
