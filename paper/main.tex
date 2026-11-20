@@ -16,7 +16,7 @@ Finite-dimensional approximations of the Koopman operator provide a way to repre
 \end{abstract}
 
 \section{Introduction}
-Finite-dimensional approximations of the Koopman operator can be constructed from snapshot pairs and observable dictionaries using extended dynamic mode decomposition (EDMD) \cite{williams2015edmd}. Lifted linear predictors have also been studied for model predictive control \cite{korda2018mpc}. The present study is deliberately narrower: it evaluates scalar prediction error before attempting closed-loop control.
+Finite-dimensional approximations of the Koopman operator can be constructed from snapshot pairs and observable dictionaries using extended dynamic mode decomposition (EDMD) \cite{williams2015edmd}. Convergence properties of EDMD approximations and their finite-horizon predictions have also been studied by Korda and Mezić \cite{korda2018convergence}. Lifted linear predictors have been studied for model predictive control \cite{korda2018mpc}. The present study is deliberately narrower: it evaluates scalar prediction error before attempting closed-loop control.
 
 A finite dictionary is a modelling choice. Approximation quality depends on dictionary structure, data coverage, regularization, the operating region, and the degree to which the selected observables capture the dynamics. A good one-step fit need not imply good multi-step prediction, and neither implies control utility.
 
